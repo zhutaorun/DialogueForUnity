@@ -11,6 +11,15 @@ class dialogue : public QMainWindow
 public:
 	dialogue(QWidget *parent = 0);
 	~dialogue();
+	void init();
+	QString file;
+private:
+	void bindEvent();
+	void open();
+	void openfile(const QString &_fliename);
+
+	void setExistingDirectory();
+	void setOpenFileName();
 
 private:
 	Ui::dialogueClass ui;

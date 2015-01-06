@@ -245,7 +245,7 @@ p, li { white-space: pre-wrap; }
     <property name="title">
      <string>文件</string>
     </property>
-    <addaction name="actionFfj"/>
+    <addaction name="action_3"/>
     <addaction name="action_4"/>
     <addaction name="action_5"/>
     <addaction name="action_6"/>
@@ -272,7 +272,7 @@ p, li { white-space: pre-wrap; }
     <string>d\</string>
    </property>
   </action>
-  <action name="actionFfj">
+  <action name="action_3">
    <property name="text">
     <string>新建</string>
    </property>
@@ -310,7 +310,7 @@ p, li { white-space: pre-wrap; }
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <resources>
-  <include location="../../../dialogue_system/dialogue/dialogue/dialogue.qrc"/>
+  <include location="dialogue.qrc"/>
  </resources>
  <connections/>
 </ui>

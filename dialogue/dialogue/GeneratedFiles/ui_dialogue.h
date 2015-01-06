@@ -32,7 +32,7 @@ class Ui_dialogueClass
 {
 public:
     QAction *actionD;
-    QAction *actionFfj;
+    QAction *action_3;
     QAction *action_4;
     QAction *action_5;
     QAction *action_6;
@@ -65,8 +65,8 @@ public:
         dialogueClass->resize(654, 453);
         actionD = new QAction(dialogueClass);
         actionD->setObjectName(QStringLiteral("actionD"));
-        actionFfj = new QAction(dialogueClass);
-        actionFfj->setObjectName(QStringLiteral("actionFfj"));
+        action_3 = new QAction(dialogueClass);
+        action_3->setObjectName(QStringLiteral("action_3"));
         action_4 = new QAction(dialogueClass);
         action_4->setObjectName(QStringLiteral("action_4"));
         action_5 = new QAction(dialogueClass);
@@ -149,7 +149,7 @@ public:
         menuBar->addAction(menu->menuAction());
         menuBar->addAction(menu_2->menuAction());
         menuBar->addAction(menu_3->menuAction());
-        menu->addAction(actionFfj);
+        menu->addAction(action_3);
         menu->addAction(action_4);
         menu->addAction(action_5);
         menu->addAction(action_6);
@@ -166,7 +166,7 @@ public:
     {
         dialogueClass->setWindowTitle(QApplication::translate("dialogueClass", "dialogue", 0));
         actionD->setText(QApplication::translate("dialogueClass", "d\\", 0));
-        actionFfj->setText(QApplication::translate("dialogueClass", "\346\226\260\345\273\272", 0));
+        action_3->setText(QApplication::translate("dialogueClass", "\346\226\260\345\273\272", 0));
         action_4->setText(QApplication::translate("dialogueClass", "\346\211\223\345\274\200", 0));
         action_5->setText(QApplication::translate("dialogueClass", "\344\277\235\345\255\230", 0));
         action_6->setText(QApplication::translate("dialogueClass", "\345\217\246\345\255\230\344\270\272", 0));
