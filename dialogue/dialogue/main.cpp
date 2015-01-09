@@ -7,5 +7,5 @@ int main(int argc, char *argv[])
 	dialogue w;
 	w.show();
 	return a.exec();
-	
+
 }

@@ -169,7 +169,7 @@ p, li { white-space: pre-wrap; }
       <height>51</height>
      </rect>
     </property>
-    <widget class="QPushButton" name="pushButton_8">
+    <widget class="QPushButton" name="pushButton_delete">
      <property name="geometry">
       <rect>
        <x>380</x>
@@ -182,7 +182,7 @@ p, li { white-space: pre-wrap; }
       <string>删除</string>
      </property>
     </widget>
-    <widget class="QPushButton" name="pushButton_5">
+    <widget class="QPushButton" name="pushButton_insert">
      <property name="geometry">
       <rect>
        <x>100</x>
@@ -195,7 +195,7 @@ p, li { white-space: pre-wrap; }
       <string>插入</string>
      </property>
     </widget>
-    <widget class="QPushButton" name="pushButton_6">
+    <widget class="QPushButton" name="pushButton_up">
      <property name="geometry">
       <rect>
        <x>190</x>
@@ -208,7 +208,7 @@ p, li { white-space: pre-wrap; }
       <string>上移</string>
      </property>
     </widget>
-    <widget class="QPushButton" name="pushButton_7">
+    <widget class="QPushButton" name="pushButton_down">
      <property name="geometry">
       <rect>
        <x>280</x>
@@ -245,23 +245,24 @@ p, li { white-space: pre-wrap; }
     <property name="title">
      <string>文件</string>
     </property>
-    <addaction name="action_3"/>
-    <addaction name="action_4"/>
-    <addaction name="action_5"/>
-    <addaction name="action_6"/>
+    <addaction name="action_new"/>
+    <addaction name="action_open"/>
+    <addaction name="action_save"/>
+    <addaction name="action_saveas"/>
    </widget>
    <widget class="QMenu" name="menu_2">
     <property name="title">
      <string>编辑</string>
     </property>
-    <addaction name="action_Json"/>
+    <addaction name="action_json"/>
+    <addaction name="action_clearlist"/>
    </widget>
    <widget class="QMenu" name="menu_3">
     <property name="title">
      <string>帮助</string>
     </property>
-    <addaction name="action_7"/>
-    <addaction name="action_8"/>
+    <addaction name="action_aboutsoft"/>
+    <addaction name="action_aboutme"/>
    </widget>
    <addaction name="menu"/>
    <addaction name="menu_2"/>
@@ -272,39 +273,44 @@ p, li { white-space: pre-wrap; }
     <string>d\</string>
    </property>
   </action>
-  <action name="action_3">
+  <action name="action_new">
    <property name="text">
     <string>新建</string>
    </property>
   </action>
-  <action name="action_4">
+  <action name="action_open">
    <property name="text">
     <string>打开</string>
    </property>
   </action>
-  <action name="action_5">
+  <action name="action_save">
    <property name="text">
     <string>保存</string>
    </property>
   </action>
-  <action name="action_6">
+  <action name="action_saveas">
    <property name="text">
     <string>另存为</string>
    </property>
   </action>
-  <action name="action_7">
+  <action name="action_aboutsoft">
    <property name="text">
     <string>关于软件</string>
    </property>
   </action>
-  <action name="action_8">
+  <action name="action_aboutme">
    <property name="text">
     <string>关于作者</string>
    </property>
   </action>
-  <action name="action_Json">
+  <action name="action_json">
    <property name="text">
     <string>生成Json数据</string>
+   </property>
+  </action>
+  <action name="action_clearlist">
+   <property name="text">
+    <string>清除列表</string>
    </property>
   </action>
  </widget>

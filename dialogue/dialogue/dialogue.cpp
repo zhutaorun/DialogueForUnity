@@ -1,7 +1,10 @@
 #include "dialogue.h"
 #include <QDebug>
-#include <qfiledialog.h>
-
+#include <QFileDialog>
+#include <QJsonDocument>
+#include <QJsonArray>
+#include <QJsonObject>
+#include <QJsonValue>
 dialogue::dialogue(QWidget *parent)
 : QMainWindow(parent)
 {
@@ -17,30 +20,61 @@ dialogue::~dialogue()
 void dialogue::init()
 {
 	bindEvent();
+	//ui.listWidget->clear();
 }
 //-----------------------------------------------------------------------
+//绑定按钮
 void dialogue::bindEvent()
 {
-	connect(ui.action_4, &QAction::triggered, [&](bool _flag){
-		this->open();
+	connect(ui.action_new, &QAction::triggered, [&](bool _flag){
 	});
-	connect(ui.pushButton_5, &QPushButton::clicked, [&](bool _flag){
+	connect(ui.action_open, &QAction::triggered, [&](bool _flag){
+		this->open();
 		this->openfile(file);
+		this->readJson();
+	});
+	connect(ui.action_save, &QAction::triggered, [&](bool _falg){
+	});
+	connect(ui.action_saveas, &QAction::triggered, [&](bool _flag){
+	});
+	connect(ui.action_json, &QAction::triggered, [&](bool _flag){
+		this->readJson();
+	});
+	connect(ui.action_clearlist, &QAction::triggered,[&](bool _flag){
+		ui.listWidget->clear();
+	});
+	connect(ui.action_aboutsoft, &QAction::triggered, [&](bool _flag){
+	});
+	connect(ui.action_aboutme, &QAction::triggered, [&](bool _flag){
+	});
+
+	connect(ui.pushButton_insert, &QPushButton::clicked, [&](bool _flag){
+	});
+	connect(ui.pushButton_up, &QPushButton::clicked, [&](bool _flag){
+	});
+	connect(ui.pushButton_down, &QPushButton::clicked, [&](bool _flag){
+	});
+	connect(ui.pushButton_delete, &QPushButton::clicked, [&](bool _flag){
+	});
+
+	connect(ui.listWidget, &QListWidget::itemDoubleClicked, [&](QListWidgetItem *_flag){
+		this->clickrefresh(_flag);
 	});
 }
 //-----------------------------------------------------------------------
+//打开资源管理器
 void dialogue::open()
 {
-	 file = QFileDialog::getOpenFileName(
+	file = QFileDialog::getOpenFileName(
 		this,
 		"Images (*.png *.xpm *.jpg)",
 		"F:/home/test.txt");
 	qDebug() << file;
 }
-
+//-----------------------------------------------------------------------
+//打开json文件
 void dialogue::openfile(const QString &_flie)
 {
-	//ui->tb_key->clear();
 	QString key;
 	QFile file1(_flie);
 	if (file1.open(QIODevice::ReadOnly))
@@ -49,44 +83,203 @@ void dialogue::openfile(const QString &_flie)
 		while (!in.atEnd())
 		{
 			in >> key;
-			//	ui->tb_key->append(key);
-			qDebug() << key;
+			//qDebug() << key;
+			qstringkey = key;
 		}
-		
+
 		file1.close();
 	}
 }
 
 //-----------------------------------------------------------------------
+void dialogue::writeJson()
+{
+}
 
 
-//void dialogue::setExistingDirectory()
-//{  //选择一个文件夹;
-//	QPushButton*  native = new QPushButton();
-//	QString* directoryLabel = new QString();
-//	QFileDialog::Options options = QFileDialog::DontResolveSymlinks | QFileDialog::ShowDirsOnly;
-//	if (!native->isChecked())
-//		options |= QFileDialog::DontUseNativeDialog;
-//	QString directory = QFileDialog::getExistingDirectory(this,
-//		tr("QFileDialog::getExistingDirectory()"),
-//		directoryLabel->text(),
-//		options);
-//	if (!directory.isEmpty())
-//		directoryLabel->setText(directory);
-//}
-////---------------------------------------------------
-//	void dialogue::setOpenFileName()
-//	{  //打开一个文件;
-//		QFileDialog::Options options;
-//		if (!native->isChecked())
-//			options |= QFileDialog::DontUseNativeDialog;
-//		QString selectedFilter;
-//		QString fileName = QFileDialog::getOpenFileName(this,
-//			tr("QFileDialog::getOpenFileName()"),
-//			openFileNameLabel->text(),
-//			tr("All Files (*);;Text Files (*.txt)"),
-//			&selectedFilter,
-//			options);
-//		if (!fileName.isEmpty())
-//			openFileNameLabel->setText(fileName);
+
 //-----------------------------------------------------------------------
+//void dialogue::readJson()
+//{
+//	QJsonArray json;
+//	json.insert(0, QString("abc德玛西亚万岁！！"));
+//	json.insert(1, QString("def你的鲜血染红了我的毒牙！"));
+//	json.insert(2, QString("ghi德玛西亚，勇往直前！"));
+//
+//	QJsonDocument document;
+//	document.setArray(json);
+//	QByteArray byte_array = document.toJson(QJsonDocument::Compact);
+//	QString json_str(byte_array);
+//	//------------------------------------------
+//	QJsonParseError json_error;
+//	QJsonDocument parse_doucment = QJsonDocument::fromJson(byte_array, &json_error);
+//	if (json_error.error == QJsonParseError::NoError)
+//	{
+//		if (parse_doucment.isArray())
+//		{
+//			QJsonArray array = parse_doucment.array();
+//			int size = array.size();
+//			for (int i = 0; i < size;i++)
+//			{
+//				QJsonValue value = array.at(i);
+//				if (value.isString())
+//				{
+//					QString name = value.toString();
+//				qDebug() << name;
+//				}
+//				else if (value.isBool())
+//				{
+//					bool flag = value.toBool();
+//				}
+//			}
+//		}
+//	}
+//}
+
+//-----------------------------------------------------------------------
+//读取json
+void dialogue::readJson()
+{
+	/*QJsonObject json;
+	QJsonObject jsonobj;
+	QJsonArray objArray;
+
+	json.insert("Oder", 1);
+	json.insert("OwerID", QString("NPC001"));
+	json.insert("Message", QString("德玛西亚万岁！！"));
+	objArray.append(json);
+	json.insert("Oder", 2);
+	json.insert("OwerID", QString("NPC002"));
+	json.insert("Message", QString("你的鲜血染红了我的毒牙！"));
+	objArray.append(json);
+	json.insert("Oder", 3);
+	json.insert("OwerID", QString("NPC003"));
+	json.insert("Message", QString("德玛西亚，勇往直前！"));
+	objArray.append(json);
+
+	jsonobj.insert("dialogueobj", objArray);
+	QJsonDocument document;
+	document.setObject(jsonobj);
+	QByteArray byte_array = document.toJson(QJsonDocument::Compact);
+	QString json_str(byte_array);
+	qDebug() << json_str;
+	//---------------------------------------------------------------
+		QJsonObject jsonobj;
+		QJsonDocument document;
+		QJsonArray objArray;
+
+		document.setObject(jsonobj);
+		QByteArray byte_array = document.toJson(QJsonDocument::Compact);*/
+	//-----------------------------------------------------------------------
+	QJsonParseError json_error;
+	QJsonDocument parse_doucment = QJsonDocument::fromJson(qstringkey.toUtf8(), &json_error);
+	qDebug() << qstringkey;
+	if (json_error.error == QJsonParseError::NoError)
+	{
+		if (parse_doucment.isObject())
+		{
+			QJsonObject obj = parse_doucment.object();
+			if (obj.contains("dialogueobj"))
+			{
+				QJsonValue value = obj.take("dialogueobj");
+				if (value.isArray())
+				{
+					QJsonArray array = value.toArray();
+					//add in list					
+					QStringList qsl;
+					for (int i = 0; i < array.count(); i++){
+						QJsonObject obj1 = array[i].toObject();
+						if (obj1.contains("Oder"))
+						{
+							QJsonValue Oder_value = obj1.take("Oder");
+							QString Oder = Oder_value.toVariant().toString();
+							qDebug() << Oder;
+							qsl.push_back(Oder);
+
+						}
+					}
+					ui.listWidget->addItems(qsl);
+
+					Arrayitem = array;
+/*
+					for (int i = 0; i < array.count(); i++)
+					{
+						QJsonObject obj1 = array[i].toObject();
+						if (obj1.contains("Oder"))
+						{
+							QJsonValue Oder_value = obj1.take("Oder");
+							if (Oder_value.isDouble())
+							{
+								int Oder = Oder_value.toVariant().toInt();
+								qDebug() << Oder;
+							}
+						}
+
+						if (obj1.contains("OwerID"))
+						{
+							QJsonValue OwerID_value = obj1.take("OwerID");
+							if (OwerID_value.isString())
+							{
+								QString OwerID = OwerID_value.toString();
+								qDebug() << OwerID;
+							}
+						}
+
+						if (obj1.contains("Message"))
+						{
+							QJsonValue Message_value = obj1.take("Message");
+							if (Message_value.isString())
+							{
+								QString Message = Message_value.toString();
+								qDebug() << Message;
+							}
+						}
+					}*/
+
+
+				}
+			}
+		}
+	}
+}
+void dialogue::clickrefresh(QListWidgetItem *_item)
+{
+	qDebug() << _item->text();
+	
+	//for (int i = 0; i < Arrayitem.count(); i++)
+	//{
+	int i = _item->text().toInt();
+		QJsonObject obj1 = Arrayitem[i].toObject();
+		if (obj1.contains("Oder"))
+		{
+			QJsonValue Oder_value = obj1.take("Oder");
+			if (Oder_value.isDouble())
+			{
+				int Oder = Oder_value.toVariant().toInt();
+				qDebug() << Oder;
+			}
+		}
+
+		if (obj1.contains("OwerID"))
+		{
+			QJsonValue OwerID_value = obj1.take("OwerID");
+			if (OwerID_value.isString())
+			{
+				QString OwerID = OwerID_value.toString();
+				qDebug() << OwerID;
+				ui.lineEdit->setText(OwerID);
+			}
+		}
+
+		if (obj1.contains("Message"))
+		{
+			QJsonValue Message_value = obj1.take("Message");
+			if (Message_value.isString())
+			{
+				QString Message = Message_value.toString();
+				qDebug() << Message;
+				ui.textEdit->setText(Message);
+			}
+		}
+	//}
+}
