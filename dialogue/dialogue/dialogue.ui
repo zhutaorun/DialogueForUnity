@@ -159,6 +159,19 @@ p, li { white-space: pre-wrap; }
       <string>Message:</string>
      </property>
     </widget>
+    <widget class="QPushButton" name="pushButton_saveitem">
+     <property name="geometry">
+      <rect>
+       <x>290</x>
+       <y>20</y>
+       <width>91</width>
+       <height>41</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>保存该Message</string>
+     </property>
+    </widget>
    </widget>
    <widget class="QWidget" name="widget_2" native="true">
     <property name="geometry">

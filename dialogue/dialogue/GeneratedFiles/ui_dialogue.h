@@ -47,6 +47,7 @@ public:
     QTextEdit *textEdit;
     QLineEdit *lineEdit;
     QLabel *label_2;
+    QPushButton *pushButton_saveitem;
     QWidget *widget_2;
     QPushButton *pushButton_delete;
     QPushButton *pushButton_insert;
@@ -116,6 +117,9 @@ public:
         label_2 = new QLabel(widget);
         label_2->setObjectName(QStringLiteral("label_2"));
         label_2->setGeometry(QRect(30, 50, 61, 21));
+        pushButton_saveitem = new QPushButton(widget);
+        pushButton_saveitem->setObjectName(QStringLiteral("pushButton_saveitem"));
+        pushButton_saveitem->setGeometry(QRect(290, 20, 91, 41));
         widget_2 = new QWidget(centralWidget);
         widget_2->setObjectName(QStringLiteral("widget_2"));
         widget_2->setGeometry(QRect(10, 0, 621, 51));
@@ -219,6 +223,7 @@ public:
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-weight:600;\">\345\276\267\347\216\233\350\245\277\344\272\232\344\270\207\345\262\201\357\274\201\357\274\201</span></p></body></html>", 0));
         lineEdit->setText(QApplication::translate("dialogueClass", "NPC001", 0));
         label_2->setText(QApplication::translate("dialogueClass", "Message:", 0));
+        pushButton_saveitem->setText(QApplication::translate("dialogueClass", "\344\277\235\345\255\230\350\257\245Message", 0));
         pushButton_delete->setText(QApplication::translate("dialogueClass", "\345\210\240\351\231\244", 0));
         pushButton_insert->setText(QApplication::translate("dialogueClass", "\346\217\222\345\205\245", 0));
         pushButton_up->setText(QApplication::translate("dialogueClass", "\344\270\212\347\247\273", 0));

@@ -20,7 +20,7 @@ dialogue::~dialogue()
 void dialogue::init()
 {
 	bindEvent();
-	//ui.listWidget->clear();
+	ui.listWidget->clear();
 }
 //-----------------------------------------------------------------------
 //绑定按钮
@@ -49,19 +49,27 @@ void dialogue::bindEvent()
 	});
 
 	connect(ui.pushButton_insert, &QPushButton::clicked, [&](bool _flag){
+		this->pbinsert();
+	
 	});
 	connect(ui.pushButton_up, &QPushButton::clicked, [&](bool _flag){
 	});
 	connect(ui.pushButton_down, &QPushButton::clicked, [&](bool _flag){
 	});
 	connect(ui.pushButton_delete, &QPushButton::clicked, [&](bool _flag){
+		this->pbdelete();
+	});
+	connect(ui.pushButton_saveitem, &QPushButton::clicked, [&](bool _flag){
+				//void QListWidgetItem::setData();
 	});
 
-	connect(ui.listWidget, &QListWidget::itemDoubleClicked, [&](QListWidgetItem *_flag){
+	connect(ui.listWidget, &QListWidget::itemClicked, [&](QListWidgetItem *_flag){
 		this->clickrefresh(_flag);
+		
 	});
 }
 //-----------------------------------------------------------------------
+
 //打开资源管理器
 void dialogue::open()
 {
@@ -92,8 +100,51 @@ void dialogue::openfile(const QString &_flie)
 }
 
 //-----------------------------------------------------------------------
+//插入方法
+void dialogue::pbinsert(){
+	int thisi = ui.listWidget->currentRow();
+	qDebug() << thisi;
+	QListWidgetItem *_item = new QListWidgetItem("new");
+	ui.listWidget->insertItem(ui.listWidget->currentRow()+1, _item);
+
+	QJsonObject json;
+	//QJsonArray Arrayitem;
+	json.insert("Oder", thisi);
+	json.insert("OwerID", QString("NPC"));
+	json.insert("Message", QString("Message"));
+	Arrayitem.append(json);
+	//QJsonValue nullQJV = NULL;
+	Arrayitem.insert(thisi+1,json);
+
+	//ui.listWidget->setSortingEnabled(true);
+	for (int i = 0; i < ui.listWidget->count(); i++)
+	{
+		QString Sitem = QString("%1").arg(i);
+		ui.listWidget->item(i)->setText(Sitem);
+	}
+
+}
+
+//-----------------------------------------------------------------------
+//删除方法
+void dialogue::pbdelete(){
+	int thisj = ui.listWidget->currentRow();
+	ui.listWidget->takeItem(ui.listWidget->currentRow());
+	Arrayitem.removeAt(thisj);
+	for (int i = 0; i < ui.listWidget->count(); i++)
+	{
+		QString Sitem = QString("%1").arg(i);
+		ui.listWidget->item(i)->setText(Sitem);
+	}
+}
+
+//-----------------------------------------------------------------------
 void dialogue::writeJson()
 {
+	/*QJsonDocument doc = QJsonDocument::fromVariant(QVariant(obj));
+		QByteArray a = doc.toJson();
+		qDebug() << a;*/
+
 }
 
 
@@ -173,7 +224,7 @@ void dialogue::readJson()
 	//-----------------------------------------------------------------------
 	QJsonParseError json_error;
 	QJsonDocument parse_doucment = QJsonDocument::fromJson(qstringkey.toUtf8(), &json_error);
-	qDebug() << qstringkey;
+	//qDebug() << qstringkey;
 	if (json_error.error == QJsonParseError::NoError)
 	{
 		if (parse_doucment.isObject())
@@ -193,7 +244,7 @@ void dialogue::readJson()
 						{
 							QJsonValue Oder_value = obj1.take("Oder");
 							QString Oder = Oder_value.toVariant().toString();
-							qDebug() << Oder;
+							//qDebug() << Oder;
 							qsl.push_back(Oder);
 
 						}
@@ -244,11 +295,8 @@ void dialogue::readJson()
 }
 void dialogue::clickrefresh(QListWidgetItem *_item)
 {
-	qDebug() << _item->text();
-	
-	//for (int i = 0; i < Arrayitem.count(); i++)
-	//{
-	int i = _item->text().toInt();
+	    //qDebug() << _item->text();
+		int i = _item->text().toInt();
 		QJsonObject obj1 = Arrayitem[i].toObject();
 		if (obj1.contains("Oder"))
 		{
@@ -256,7 +304,7 @@ void dialogue::clickrefresh(QListWidgetItem *_item)
 			if (Oder_value.isDouble())
 			{
 				int Oder = Oder_value.toVariant().toInt();
-				qDebug() << Oder;
+				//qDebug() << Oder;
 			}
 		}
 
@@ -266,7 +314,7 @@ void dialogue::clickrefresh(QListWidgetItem *_item)
 			if (OwerID_value.isString())
 			{
 				QString OwerID = OwerID_value.toString();
-				qDebug() << OwerID;
+				//qDebug() << OwerID;
 				ui.lineEdit->setText(OwerID);
 			}
 		}
@@ -277,9 +325,8 @@ void dialogue::clickrefresh(QListWidgetItem *_item)
 			if (Message_value.isString())
 			{
 				QString Message = Message_value.toString();
-				qDebug() << Message;
+				//qDebug() << Message;
 				ui.textEdit->setText(Message);
 			}
 		}
-	//}
 }

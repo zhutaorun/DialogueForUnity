@@ -20,6 +20,9 @@ private:
 	void bindEvent();
 	void open();
 	void openfile(const QString &_fliename);
+	void pbinsert();
+	void pbdelete();
+	
 	void readJson();
 	void writeJson();
 	void clickrefresh(QListWidgetItem *_item);
