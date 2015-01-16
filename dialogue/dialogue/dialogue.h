@@ -13,13 +13,18 @@ public:
 	dialogue(QWidget *parent = 0);
 	~dialogue();
 	void init();
-	QString file;
-	QString qstringkey;
+	QString fileOpen;
+	QString fileSave;
+	QString qstringkeyOpen;
+	QString qstribgkeySave;
 	QJsonArray Arrayitem;
+
 private:
 	void bindEvent();
 	void open();
-	void openfile(const QString &_fliename);
+	void openFile(const QString &_flie);
+	void save();
+	void saveFile(const QString &_flie);
 	void pbinsert();
 	void pbdelete();
 	
