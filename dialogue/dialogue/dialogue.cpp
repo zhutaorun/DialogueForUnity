@@ -28,18 +28,23 @@ void dialogue::init()
 void dialogue::bindEvent()
 {
 	connect(ui.action_new, &QAction::triggered, [&](bool _flag){
+		this->save();
+		this->saveFile(fileID);
 	});
 	connect(ui.action_open, &QAction::triggered, [&](bool _flag){
+	//	ui.listWidget->clear();
 		this->open();
-		this->openFile(fileOpen);
+		this->openFile(fileID);
 		this->readJson();
 	});
 	connect(ui.action_save, &QAction::triggered, [&](bool _falg){
+		this->writeJson();
+		this->saveFile(fileID);
 	});
 	connect(ui.action_saveas, &QAction::triggered, [&](bool _flag){
 		this->save();
 		this->writeJson();
-		this->saveFile(fileSave);
+		this->saveFile(fileID);
 	});
 	connect(ui.action_json, &QAction::triggered, [&](bool _flag){
 		this->writeJson();
@@ -53,7 +58,7 @@ void dialogue::bindEvent()
 	});
 
 	connect(ui.pushButton_insert, &QPushButton::clicked, [&](bool _flag){
-		this->pbinsert();
+		this->pbInsert();
 	
 	});
 	connect(ui.pushButton_up, &QPushButton::clicked, [&](bool _flag){
@@ -62,8 +67,8 @@ void dialogue::bindEvent()
 	connect(ui.pushButton_down, &QPushButton::clicked, [&](bool _flag){
 	});
 	connect(ui.pushButton_delete, &QPushButton::clicked, [&](bool _flag){
-		this->pbdelete();
-		ui.pushButton_delete->setToolTip("delete删除当前选中的对话");
+		this->pbDelete();
+		ui.pushButton_delete->setToolTip("delete 当前选中的对话");
 		ui.pushButton_delete->toolTip();
 	});
 	connect(ui.pushButton_saveitem, &QPushButton::clicked, [&](bool _flag){
@@ -72,7 +77,6 @@ void dialogue::bindEvent()
 
 	connect(ui.listWidget, &QListWidget::currentItemChanged, [&](QListWidgetItem *_flag){
 		this->clickrefresh(_flag);
-		
 	});
 }
 //-----------------------------------------------------------------------
@@ -80,14 +84,14 @@ void dialogue::bindEvent()
 //打开文件资源管理器
 void dialogue::open()
 {
-	fileOpen = QFileDialog::getOpenFileName(
+	fileID = QFileDialog::getOpenFileName(
 		this, tr("Open File"),
 		"F:/home",
 		tr("Text files (*.txt);;XML files (*.xml);;JSON files (*.json)"));
-	qDebug() << fileOpen;
+	qDebug() << fileID;
 }
 //-----------------------------------------------------------------------
-//打开json文本txt文件
+//打开json文本文件
 void dialogue::openFile(const QString &_flie)
 {
 	QString key;
@@ -107,53 +111,43 @@ void dialogue::openFile(const QString &_flie)
 }
 
 //-----------------------------------------------------------------------
-//保存文件;
+//保存文件资源管理器;
 void dialogue::save(){
-	fileSave = QFileDialog::getSaveFileName(
+	fileID = QFileDialog::getSaveFileName(
 		this, tr("Save File"),
-		"F:/home/newJson.txt",
+		"F:/home",
 		tr("Text files (*.txt);;XML files (*.xml);;JSON files (*.json)"));
-	qDebug() << fileSave;
-	//QTextEdit
+	qDebug() << fileID;
 }
 //-----------------------------------------------------------------------
-//
+//保存json文本
 void dialogue::saveFile(const QString &_flie)
 {
-	//QString key;
 	QFile file1(_flie);
-	if (file1.open(QIODevice::WriteOnly | QIODevice::Append | QIODevice::Text))
+	if (file1.open(QIODevice::WriteOnly | QIODevice::Text))
 	{
 		QTextStream out(&file1);
-		while (!out.atEnd())
-		{
-			//out << key;
-			//qDebug() << key;
-			//qstringkey = key;
-		}
-		//qDebug() << "111111111111" << qstribgkeyW;
 		out << qstribgkeySave;
 		file1.close();
 	}
 }
 //-----------------------------------------------------------------------
 //插入方法
-void dialogue::pbinsert(){
-	//--int thisi = ui.listWidget->currentRow();
-	int thisi = ui.listWidget->count();
-	QString Sthisi = QString("%1").arg(thisi);
-	qDebug() << thisi;
+void dialogue::pbInsert(){
+	int thisi = ui.listWidget->currentRow();
+	int thisc = ui.listWidget->count();
+	QString Sthisi = QString("%1").arg(thisc);
+	//qDebug() << thisc;
 	QListWidgetItem *_item = new QListWidgetItem(Sthisi);
 	ui.listWidget->insertItem(ui.listWidget->currentRow()+1, _item);
-	//thisi++;
 
-	QJsonObject jsonObj;
-	//--json.insert("Oder", thisi);
-	jsonObj.insert("Oder", thisi);
+
+	QJsonObject jsonObj;	
+	jsonObj.insert("Oder", Sthisi);
 	jsonObj.insert("OwerID", QString("NPC"));
 	jsonObj.insert("Message", QString("Message"));
-	Arrayitem.append(jsonObj);
-	Arrayitem.insert(thisi, jsonObj);
+	//Arrayitem.append(jsonObj);//插入到数组末尾
+	Arrayitem.insert(++thisi, jsonObj);
 
 	//ui.listWidget->setSortingEnabled(true);
 	/*--for (int i = 0; i < ui.listWidget->count(); i++)
@@ -166,10 +160,12 @@ void dialogue::pbinsert(){
 
 //-----------------------------------------------------------------------
 //删除方法
-void dialogue::pbdelete(){
-	int thisj = ui.listWidget->currentRow();
+void dialogue::pbDelete(){
+	int thism = ui.listWidget->currentRow();
 	ui.listWidget->takeItem(ui.listWidget->currentRow());
-	Arrayitem.removeAt(thisj);
+
+	qDebug() << thism;
+	Arrayitem.removeAt(thism);
 
 	/*--for (int i = 0; i < ui.listWidget->count(); i++)
 	{
@@ -179,23 +175,51 @@ void dialogue::pbdelete(){
 }
 
 //-----------------------------------------------------------------------
+//写出Json
 void dialogue::writeJson()
 {
-	/*QJsonDocument doc = QJsonDocument::fromVariant(QVariant(Arrayitem));
-		QByteArray QBa = doc.toJson(QJsonDocument::Compact);//--Indented
-		QString QSa(QBa);
-		qDebug() << QSa;*/
+	//QJsonDocument doc = QJsonDocument::fromVariant(QVariant(Arrayitem));
+	//	QByteArray QBa = doc.toJson(QJsonDocument::Compact);//--Indented
+	//	QString QSa(QBa);
+	//	qDebug() << QSa;
 
 	QJsonDocument document;
 	document.setArray(Arrayitem);
-	QByteArray byte_array = document.toJson(QJsonDocument::Indented);
-	QString json_str(byte_array);
-	qDebug() << json_str;
-	qstribgkeySave = json_str;
-	qDebug() << "222222222222" << qstribgkeySave;
+	QByteArray byteArray = document.toJson(QJsonDocument::Compact);
+	QString jsonStr(byteArray);
+	qstribgkeySave = jsonStr;
+	qDebug() << "writeeeeeeeeeeeeeeeejson" << qstribgkeySave;
 }
+//-----------------------------------------------------------------------
+//读取Json
+void dialogue::readJson(){
+	QJsonParseError json_error;
+	QJsonDocument parse_doucment = QJsonDocument::fromJson(qstringkeyOpen.toUtf8(), &json_error);
+	if (json_error.error == QJsonParseError::NoError)
+	{
+		if (parse_doucment.isArray())
+				{
+			QJsonArray array = parse_doucment.array();
+					//add in list	
+			      int size = array.size();
+					QStringList qsl;
+					for (int i = 0; i < array.count(); i++){
+						QJsonObject obj1 = array[i].toObject();
+						if (obj1.contains("Oder"))
+						{
+							QJsonValue Oder_value = obj1.take("Oder");
+							QString Oder = Oder_value.toVariant().toString();
+							//qDebug() <<"Oder" << Oder;
+							qsl.push_back(Oder);
 
-
+						}
+					}
+					ui.listWidget->addItems(qsl);
+					//qDebug() << "rrrrrrrrrrrrreadJson" << array;
+					Arrayitem = array;
+		}
+	}
+}
 
 //-----------------------------------------------------------------------
 //void dialogue::readJson()
@@ -235,45 +259,38 @@ void dialogue::writeJson()
 //	}
 //}
 
+
 //-----------------------------------------------------------------------
-//读取json
-void dialogue::readJson()
+//读取Json
+/*void dialogue::readJson()
 {
-	/*QJsonObject json;
-	QJsonObject jsonobj;
-	QJsonArray objArray;
+	////测试：此处提供测试json数组
+	//QJsonObject json;
+	//QJsonObject jsonobj;
+	//QJsonArray objArray;
+	//json.insert("Oder", 1);
+	//json.insert("OwerID", QString("NPC001"));
+	//json.insert("Message", QString("德玛西亚万岁！！"));
+	//objArray.append(json);
+	//json.insert("Oder", 2);
+	//json.insert("OwerID", QString("NPC002"));
+	//json.insert("Message", QString("你的鲜血染红了我的毒牙！"));
+	//objArray.append(json);
+	//json.insert("Oder", 3);
+	//json.insert("OwerID", QString("NPC003"));
+	//json.insert("Message", QString("德玛西亚，勇往直前！"));
+	//objArray.append(json);
+	//jsonobj.insert("dialogueobj", objArray);
+	//QJsonDocument document;
+	//document.setObject(jsonobj);
+	//QByteArray byte_array = document.toJson(QJsonDocument::Compact);
+	//QString json_str(byte_array);
+	//qDebug() << json_str;
 
-	json.insert("Oder", 1);
-	json.insert("OwerID", QString("NPC001"));
-	json.insert("Message", QString("德玛西亚万岁！！"));
-	objArray.append(json);
-	json.insert("Oder", 2);
-	json.insert("OwerID", QString("NPC002"));
-	json.insert("Message", QString("你的鲜血染红了我的毒牙！"));
-	objArray.append(json);
-	json.insert("Oder", 3);
-	json.insert("OwerID", QString("NPC003"));
-	json.insert("Message", QString("德玛西亚，勇往直前！"));
-	objArray.append(json);
-
-	jsonobj.insert("dialogueobj", objArray);
-	QJsonDocument document;
-	document.setObject(jsonobj);
-	QByteArray byte_array = document.toJson(QJsonDocument::Compact);
-	QString json_str(byte_array);
-	qDebug() << json_str;
-	//---------------------------------------------------------------
-		QJsonObject jsonobj;
-		QJsonDocument document;
-		QJsonArray objArray;
-
-		document.setObject(jsonobj);
-		QByteArray byte_array = document.toJson(QJsonDocument::Compact);*/
-	//-----------------------------------------------------------------------
+  //-----------------------------------------------------------------------
 
 	QJsonParseError json_error;
 	QJsonDocument parse_doucment = QJsonDocument::fromJson(qstringkeyOpen.toUtf8(), &json_error);
-	//qDebug() << qstringkey;
 	if (json_error.error == QJsonParseError::NoError)
 	{
 		if (parse_doucment.isObject())
@@ -299,48 +316,15 @@ void dialogue::readJson()
 						}
 					}
 					ui.listWidget->addItems(qsl);
-
+					qDebug() << "rrrrrrrrrrrrreadJson" << array;
 					Arrayitem = array;
-/*
-					for (int i = 0; i < array.count(); i++)
-					{
-						QJsonObject obj1 = array[i].toObject();
-						if (obj1.contains("Oder"))
-						{
-							QJsonValue Oder_value = obj1.take("Oder");
-							if (Oder_value.isDouble())
-							{
-								int Oder = Oder_value.toVariant().toInt();
-								qDebug() << Oder;
-							}
-						}
-						if (obj1.contains("OwerID"))
-						{
-							QJsonValue OwerID_value = obj1.take("OwerID");
-							if (OwerID_value.isString())
-							{
-								QString OwerID = OwerID_value.toString();
-								qDebug() << OwerID;
-							}
-						}
-
-						if (obj1.contains("Message"))
-						{
-							QJsonValue Message_value = obj1.take("Message");
-							if (Message_value.isString())
-							{
-								QString Message = Message_value.toString();
-								qDebug() << Message;
-							}
-						}
-					}*/
-
-
 				}
 			}
 		}
 	}
-}
+}*/
+
+
 void dialogue::clickrefresh(QListWidgetItem *_item)
 {
 		/*QString OwerS = "jjjjjj";
@@ -348,15 +332,16 @@ void dialogue::clickrefresh(QListWidgetItem *_item)
 		ui.listWidget->currentItem()->whatsThis();*/
 	    //qDebug() << _item->text();
 		int i = _item->text().toInt();
-		//int j = ui.listWidget->currentRow();
-		QJsonObject obj1 = Arrayitem[i].toObject();
+		qDebug() << "iiiiiiiiiiiiiiii" << i;
+		int j = ui.listWidget->currentRow();
+		QJsonObject obj1 = Arrayitem[j].toObject();
 		if (obj1.contains("Oder"))
 		{
 			QJsonValue Oder_value = obj1.take("Oder");
-			if (Oder_value.isDouble())
+			if (Oder_value.isString())
 			{
 				int Oder = Oder_value.toVariant().toInt();
-				//qDebug() << Oder;				
+				qDebug() <<"Oderrrrrrrrrrrrrrrr"<< Oder;				
 			}
 		}
 
@@ -366,10 +351,12 @@ void dialogue::clickrefresh(QListWidgetItem *_item)
 			if (OwerID_value.isString())
 			{
 				QString OwerID = OwerID_value.toString();
-				//qDebug() << OwerID;
+				qDebug() <<"OwerIDDDDDDDDDDDDDD"<< OwerID;
 				ui.lineEdit->setText(OwerID);
+				//ui.listWidget->item(Oder)->setText(OwerID);
 			}
 		}
+
 
 		if (obj1.contains("Message"))
 		{
@@ -377,7 +364,7 @@ void dialogue::clickrefresh(QListWidgetItem *_item)
 			if (Message_value.isString())
 			{
 				QString Message = Message_value.toString();
-				//qDebug() << Message;
+				qDebug() <<"Messageeeeeeeeeeeeee"<< Message;
 				ui.textEdit->setText(Message);
 			}
 		}

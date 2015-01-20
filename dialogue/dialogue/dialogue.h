@@ -13,8 +13,9 @@ public:
 	dialogue(QWidget *parent = 0);
 	~dialogue();
 	void init();
-	QString fileOpen;
-	QString fileSave;
+	//QString fileOpen;
+	//QString fileSave;
+	QString fileID;
 	QString qstringkeyOpen;
 	QString qstribgkeySave;
 	QJsonArray Arrayitem;
@@ -25,8 +26,8 @@ private:
 	void openFile(const QString &_flie);
 	void save();
 	void saveFile(const QString &_flie);
-	void pbinsert();
-	void pbdelete();
+	void pbInsert();
+	void pbDelete();
 	
 	void readJson();
 	void writeJson();
