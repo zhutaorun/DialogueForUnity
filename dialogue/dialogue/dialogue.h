@@ -13,7 +13,8 @@ public:
 	dialogue(QWidget *parent = 0);
 	~dialogue();
 	void init();
-
+	//QString fileOpen;
+	//QString fileSave;
 	QString fileID;
 	QString qstringkeyOpen;
 	QString qstribgkeySave;
@@ -27,12 +28,11 @@ private:
 	void saveFile(const QString &_flie);
 	void pbInsert();
 	void pbDelete();
-
+	
 	void readJson();
 	void writeJson();
 	void clickrefresh(QListWidgetItem *_item);
-	void refresh(QListWidgetItem *_item);
-	void fresh();
+
 	void setExistingDirectory();
 	void setOpenFileName();
 
